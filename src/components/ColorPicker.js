@@ -15,7 +15,12 @@ export class ColorPicker extends React.Component{
 		draw(){
 			if(this.canvas){
 				var ctx = this.canvas.getContext('2d');
-				ctx.fillRect(10, 10, 50, 50);
+				for(var i = 0 ; i < 250 ; i++){
+					for(var j = 0 ; j < 250 ; j++){
+						ctx.fillStyle = "rgb(" + i + ", " + j + ", "+ "0)";
+						ctx.fillRect(i, j, 1, 1);
+					}
+				}
 			}
 			else{
 				console.log("canvas is not defined");
@@ -24,7 +29,7 @@ export class ColorPicker extends React.Component{
 
 		render(){
 			return(
-					<canvas style={this.style}ref={(canvas) => {this.canvas = canvas; }}> </canvas>
+					<canvas style={this.style} ref={(canvas) => {this.canvas = canvas; }}> </canvas>
 			);
 		}
 }
