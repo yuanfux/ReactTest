@@ -11,7 +11,6 @@ export class App extends React.Component{
 		return(
 				<div>
 				<ColorPicker />
-				<ColorPointer />
 				</div>
 		);
 	}

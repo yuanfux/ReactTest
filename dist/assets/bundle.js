@@ -22243,8 +22243,7 @@
 				return _react2.default.createElement(
 					'div',
 					null,
-					_react2.default.createElement(_ColorPicker.ColorPicker, null),
-					_react2.default.createElement(_ColorPointer.ColorPointer, null)
+					_react2.default.createElement(_ColorPicker.ColorPicker, null)
 				);
 			}
 		}]);
@@ -22287,6 +22286,11 @@
 
 			_this.width = 250;
 			_this.height = 250;
+			_this.canMove = false;
+			_this.state = {
+				top: 0,
+				left: 0
+			};
 			return _this;
 		}
 
@@ -22322,13 +22326,85 @@
 				}
 			}
 		}, {
+			key: 'getStyle',
+			value: function getStyle() {
+				return {
+					backgroundColor: "transparent",
+					border: "2px solid white",
+					borderRadius: "50%",
+					height: 20,
+					width: 20,
+					marginLeft: -10,
+					marginTop: -10,
+					padding: 0,
+					position: "absolute",
+					top: this.state.top,
+					left: this.state.left
+				};
+			}
+		}, {
+			key: 'mouseDown',
+			value: function mouseDown(e) {
+				this.canMove = true;
+				if (this.canMove) {
+					this.moveCursor(e.pageX, e.pageY);
+				}
+			}
+		}, {
+			key: 'mouseMove',
+			value: function mouseMove(e) {
+				if (this.canMove) {
+					this.moveCursor(e.pageX, e.pageY);
+				}
+			}
+		}, {
+			key: 'mouseUp',
+			value: function mouseUp() {
+				this.canMove = false;
+			}
+		}, {
+			key: 'moveCursor',
+			value: function moveCursor(x, y) {
+				var moveX = x;
+				var moveY = y;
+				if (moveY > this.canvasHeight) {
+					moveY = this.canvasHeight;
+				}
+				if (moveY < 0) {
+					moveY = 0;
+				}
+				if (moveX > this.canvasWidth) {
+					moveX = this.canvasWidth;
+				}
+				if (moveX < 0) {
+					moveX = 0;
+				}
+				this.setState({ top: moveY + "px", left: moveX + "px" });
+			}
+		}, {
 			key: 'render',
 			value: function render() {
 				var _this2 = this;
 
-				return _react2.default.createElement('canvas', { width: this.width, height: this.height, ref: function ref(canvas) {
-						_this2.canvas = canvas;
-					} });
+				return _react2.default.createElement(
+					'div',
+					null,
+					_react2.default.createElement('canvas', { onMouseDown: function onMouseDown(e) {
+							return _this2.mouseDown(e);
+						},
+						onMouseMove: function onMouseMove(e) {
+							return _this2.mouseMove(e);
+						},
+						onMouseUp: function onMouseUp(e) {
+							return _this2.mouseUp();
+						},
+						width: this.width,
+						height: this.height,
+						ref: function ref(canvas) {
+							_this2.canvas = canvas;
+						} }),
+					_react2.default.createElement('div', { style: this.getStyle() })
+				);
 			}
 		}]);
 
@@ -22385,9 +22461,10 @@
 					backgroundColor: "transparent",
 					border: "2px solid white",
 					borderRadius: "50%",
-					height: "20px",
-					width: "20px",
-					margin: 0,
+					height: 20,
+					width: 20,
+					marginLeft: -10,
+					marginTop: -10,
 					padding: 0,
 					position: "absolute",
 					top: this.state.top,
@@ -22396,30 +22473,15 @@
 			}
 		}, {
 			key: "mouseDown",
-			value: function mouseDown() {
+			value: function mouseDown(e) {
 				this.canMove = true;
-				console.log("mouse down: " + this.canMove);
+				this.moveCursor(e.pageX, e.pageY);
 			}
 		}, {
 			key: "mouseMove",
 			value: function mouseMove(e) {
 				if (this.canMove) {
-					console.log("moving");
-					var moveX = e.pageX;
-					var moveY = e.pageY;
-					if (moveY > this.canvasHeight) {
-						moveY = this.canvasHeight;
-					}
-					if (moveY < 0) {
-						moveY = 0;
-					}
-					if (moveX > this.canvasWidth) {
-						moveX = this.canvasWidth;
-					}
-					if (moveX < 0) {
-						moveX = 0;
-					}
-					this.setState({ top: moveY + "px", left: moveX + "px" });
+					this.moveCursor(e.pageX, e.pageY);
 				}
 			}
 		}, {
@@ -22429,6 +22491,26 @@
 				console.log("mouse up: " + this.canMove);
 			}
 		}, {
+			key: "moveCursor",
+			value: function moveCursor(x, y) {
+				var moveX = x;
+				var moveY = y;
+				var outOfBounds = false;
+				if (moveY > this.canvasHeight) {
+					moveY = this.canvasHeight;
+				}
+				if (moveY < 0) {
+					moveY = 0;
+				}
+				if (moveX > this.canvasWidth) {
+					moveX = this.canvasWidth;
+				}
+				if (moveX < 0) {
+					moveX = 0;
+				}
+				this.setState({ top: moveY + "px", left: moveX + "px" });
+			}
+		}, {
 			key: "render",
 			value: function render() {
 				var _this2 = this;
@@ -22436,7 +22518,7 @@
 				return (
 					// onDragEnd={(e) => (this.dragEnd(e))}
 					_react2.default.createElement("div", { onMouseDown: function onMouseDown(e) {
-							return _this2.mouseDown();
+							return _this2.mouseDown(e);
 						},
 						onMouseMove: function onMouseMove(e) {
 							return _this2.mouseMove(e);

@@ -5,6 +5,11 @@ export class ColorPicker extends React.Component{
 			super(props);
 			this.width = 250;
 			this.height = 250;
+			this.canMove = false;
+			this.state = {
+				top : 0,
+				left : 0
+			}
 		}
 		componentDidMount(){
 			this.draw();
@@ -37,9 +42,69 @@ export class ColorPicker extends React.Component{
 			}
 		}
 
+	getStyle(){
+		return {
+			backgroundColor: "transparent",
+			border: "2px solid white",
+			borderRadius: "50%",
+			height: 20,
+			width: 20,
+			marginLeft: -10,
+			marginTop: -10,
+			padding: 0,
+			position: "absolute",
+			top: this.state.top,
+			left: this.state.left
+		}
+	}
+
+	mouseDown(e){
+		this.canMove = true;
+		if(this.canMove){
+			this.moveCursor(e.pageX, e.pageY);
+		}
+	}
+
+	mouseMove(e){
+		if(this.canMove){
+			this.moveCursor(e.pageX, e.pageY);
+		}
+	}
+
+	mouseUp(){
+		this.canMove = false;
+	}
+
+	moveCursor(x, y){
+		let moveX = x;
+		let moveY = y;
+		if(moveY > this.canvasHeight){
+				moveY = this.canvasHeight;
+			}
+			if(moveY < 0){
+				moveY = 0;
+			}
+			if(moveX > this.canvasWidth){
+				moveX = this.canvasWidth;
+			}
+			if(moveX < 0){
+				moveX = 0;
+			}
+			this.setState({top :  moveY + "px", left :  moveX + "px"});
+	}
+
+
 		render(){
 			return(
-					<canvas width={this.width} height= {this.height} ref={(canvas) => {this.canvas = canvas; }}></canvas>
+					<div>
+						<canvas onMouseDown={(e)=>(this.mouseDown(e))} 
+								onMouseMove={(e)=>(this.mouseMove(e))}
+								onMouseUp={(e)=>(this.mouseUp())}
+								width={this.width} 
+								height= {this.height} 
+								ref={(canvas) => {this.canvas = canvas; }}></canvas>
+						<div style={this.getStyle()}></div>
+					</div>
 			);
 		}
 }
