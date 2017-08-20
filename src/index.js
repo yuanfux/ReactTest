@@ -9,10 +9,7 @@ window.React = React
 // 	document.getElementById('react-container')
 // )
 render(
-	<div>
-	<h1> fuck react </h1>
-	<ColorPicker />
-	</div>
+	<App />
 	,
 	document.getElementById('react-container')
 )

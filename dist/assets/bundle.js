@@ -64,16 +64,7 @@
 	// 	<SkiDayCount/>,
 	// 	document.getElementById('react-container')
 	// )
-	(0, _reactDom.render)(_react2.default.createElement(
-		'div',
-		null,
-		_react2.default.createElement(
-			'h1',
-			null,
-			' fuck react '
-		),
-		_react2.default.createElement(_ColorPicker.ColorPicker, null)
-	), document.getElementById('react-container'));
+	(0, _reactDom.render)(_react2.default.createElement(_App.App, null), document.getElementById('react-container'));
 
 /***/ },
 /* 1 */
@@ -22227,7 +22218,7 @@
 
 	var _ColorPicker = __webpack_require__(185);
 
-	var _ColorPicker2 = _interopRequireDefault(_ColorPicker);
+	var _ColorPointer = __webpack_require__(186);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -22249,7 +22240,12 @@
 		_createClass(App, [{
 			key: 'render',
 			value: function render() {
-				return _react2.default.createElement(_ColorPicker2.default, null);
+				return _react2.default.createElement(
+					'div',
+					null,
+					_react2.default.createElement(_ColorPicker.ColorPicker, null),
+					_react2.default.createElement(_ColorPointer.ColorPointer, null)
+				);
 			}
 		}]);
 
@@ -22289,10 +22285,8 @@
 
 			var _this = _possibleConstructorReturn(this, (ColorPicker.__proto__ || Object.getPrototypeOf(ColorPicker)).call(this, props));
 
-			_this.style = {
-				width: '250px',
-				height: '250px'
-			};
+			_this.width = 250;
+			_this.height = 250;
 			return _this;
 		}
 
@@ -22303,15 +22297,26 @@
 			}
 		}, {
 			key: 'draw',
-			value: function draw() {
+			value: function draw(color) {
 				if (this.canvas) {
 					var ctx = this.canvas.getContext('2d');
-					for (var i = 0; i < 250; i++) {
-						for (var j = 0; j < 250; j++) {
-							ctx.fillStyle = "rgb(" + i + ", " + j + ", " + "0)";
-							ctx.fillRect(i, j, 1, 1);
-						}
-					}
+
+					ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+					if (!color) color = '#f00';
+					ctx.fillStyle = color;
+					ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+					var whiteGradient = ctx.createLinearGradient(0, 0, this.canvas.width, 0);
+					whiteGradient.addColorStop(0, "#fff");
+					whiteGradient.addColorStop(1, "transparent");
+					ctx.fillStyle = whiteGradient;
+					ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+					var blackGradient = ctx.createLinearGradient(0, 0, 0, this.canvas.height);
+					blackGradient.addColorStop(0, "transparent");
+					blackGradient.addColorStop(1, "#000");
+					ctx.fillStyle = blackGradient;
+					ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 				} else {
 					console.log("canvas is not defined");
 				}
@@ -22321,17 +22326,130 @@
 			value: function render() {
 				var _this2 = this;
 
-				return _react2.default.createElement(
-					'canvas',
-					{ style: this.style, ref: function ref(canvas) {
-							_this2.canvas = canvas;
-						} },
-					' '
-				);
+				return _react2.default.createElement('canvas', { width: this.width, height: this.height, ref: function ref(canvas) {
+						_this2.canvas = canvas;
+					} });
 			}
 		}]);
 
 		return ColorPicker;
+	}(_react2.default.Component);
+
+/***/ },
+/* 186 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.ColorPointer = undefined;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ColorPointer = exports.ColorPointer = function (_React$Component) {
+		_inherits(ColorPointer, _React$Component);
+
+		function ColorPointer(props) {
+			_classCallCheck(this, ColorPointer);
+
+			var _this = _possibleConstructorReturn(this, (ColorPointer.__proto__ || Object.getPrototypeOf(ColorPointer)).call(this, props));
+
+			_this.state = {
+				top: 0,
+				left: 0
+			};
+			_this.canvasWidth = 250;
+			_this.canvasHeight = 250;
+			_this.canMove = false;
+			return _this;
+		}
+
+		_createClass(ColorPointer, [{
+			key: "getStyle",
+			value: function getStyle() {
+				return {
+					backgroundColor: "transparent",
+					border: "2px solid white",
+					borderRadius: "50%",
+					height: "20px",
+					width: "20px",
+					margin: 0,
+					padding: 0,
+					position: "absolute",
+					top: this.state.top,
+					left: this.state.left
+				};
+			}
+		}, {
+			key: "mouseDown",
+			value: function mouseDown() {
+				this.canMove = true;
+				console.log("mouse down: " + this.canMove);
+			}
+		}, {
+			key: "mouseMove",
+			value: function mouseMove(e) {
+				if (this.canMove) {
+					console.log("moving");
+					var moveX = e.pageX;
+					var moveY = e.pageY;
+					if (moveY > this.canvasHeight) {
+						moveY = this.canvasHeight;
+					}
+					if (moveY < 0) {
+						moveY = 0;
+					}
+					if (moveX > this.canvasWidth) {
+						moveX = this.canvasWidth;
+					}
+					if (moveX < 0) {
+						moveX = 0;
+					}
+					this.setState({ top: moveY + "px", left: moveX + "px" });
+				}
+			}
+		}, {
+			key: "mouseUp",
+			value: function mouseUp() {
+				this.canMove = false;
+				console.log("mouse up: " + this.canMove);
+			}
+		}, {
+			key: "render",
+			value: function render() {
+				var _this2 = this;
+
+				return (
+					// onDragEnd={(e) => (this.dragEnd(e))}
+					_react2.default.createElement("div", { onMouseDown: function onMouseDown(e) {
+							return _this2.mouseDown();
+						},
+						onMouseMove: function onMouseMove(e) {
+							return _this2.mouseMove(e);
+						},
+						onMouseUp: function onMouseUp(e) {
+							return _this2.mouseUp();
+						},
+						style: this.getStyle() })
+				);
+			}
+		}]);
+
+		return ColorPointer;
 	}(_react2.default.Component);
 
 /***/ }

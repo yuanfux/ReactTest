@@ -3,24 +3,34 @@ import React from 'react'
 export class ColorPicker extends React.Component{
 		constructor(props){
 			super(props);
-			this.style={
-				width : '250px',
-				height : '250px'
-			}
+			this.width = 250;
+			this.height = 250;
 		}
 		componentDidMount(){
 			this.draw();
 
 		}
-		draw(){
+		draw(color){
 			if(this.canvas){
 				var ctx = this.canvas.getContext('2d');
-				for(var i = 0 ; i < 250 ; i++){
-					for(var j = 0 ; j < 250 ; j++){
-						ctx.fillStyle = "rgb(" + i + ", " + j + ", "+ "0)";
-						ctx.fillRect(i, j, 1, 1);
-					}
-				}
+
+				ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+				if(!color) color = '#f00';
+				ctx.fillStyle = color;
+				ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+				var whiteGradient = ctx.createLinearGradient(0, 0, this.canvas.width, 0);
+				whiteGradient.addColorStop(0, "#fff");
+				whiteGradient.addColorStop(1, "transparent");
+				ctx.fillStyle = whiteGradient;
+				ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+				var blackGradient = ctx.createLinearGradient(0, 0, 0, this.canvas.height);
+				blackGradient.addColorStop(0, "transparent");
+				blackGradient.addColorStop(1, "#000");
+				ctx.fillStyle = blackGradient;
+				ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+				
 			}
 			else{
 				console.log("canvas is not defined");
@@ -29,7 +39,7 @@ export class ColorPicker extends React.Component{
 
 		render(){
 			return(
-					<canvas style={this.style} ref={(canvas) => {this.canvas = canvas; }}> </canvas>
+					<canvas width={this.width} height= {this.height} ref={(canvas) => {this.canvas = canvas; }}></canvas>
 			);
 		}
 }
