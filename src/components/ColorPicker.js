@@ -90,7 +90,7 @@ export class ColorPicker extends React.Component{
 			if(moveX < 0){
 				moveX = 0;
 			}
-			this.setState({top :  moveY + "px", left :  moveX + "px"});
+			this.setState({top :  moveY, left :  moveX});
 	}
 
 
