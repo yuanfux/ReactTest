@@ -37,9 +37,6 @@ export class ColorPicker extends React.Component{
 				ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 				
 			}
-			else{
-				console.log("canvas is not defined");
-			}
 		}
 
 	getStyle(){
