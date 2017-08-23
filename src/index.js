@@ -7,7 +7,6 @@ window.React = React
 // render(
 // 	<SkiDayCount/>,
 // 	document.getElementById('react-container')
-// )
 render(
 	<App />
 	,
