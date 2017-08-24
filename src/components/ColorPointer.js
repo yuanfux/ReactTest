@@ -63,7 +63,6 @@ export class ColorPointer extends React.Component{
 
 	render(){
 		return(
-			// onDragEnd={(e) => (this.dragEnd(e))}
 			<div onMouseDown={(e) => (this.mouseDown(e))} 
 				 onMouseMove={(e) => (this.mouseMove(e))} 
 				 onMouseUp={(e) =>(this.mouseUp())}
